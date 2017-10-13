@@ -101,7 +101,7 @@ class TopicsController < ApplicationController
       team_list: params[:topic][:team_list],
       channel: 'web')
 
-    if recaptcha_enabled?
+    if !user_signed_in? && recaptcha_enabled?
       render :new && return unless verify_recaptcha(model: @topic)
     end
 
