@@ -193,6 +193,9 @@ group :production do
   # Uncomment this gem for Heroku:
   # gem 'rails_12factor'
   gem 'unicorn'
+
+  # Team App
+  gem 'rollbar'
 end
 
 ruby '>= 2.2', '< 3.0'
