@@ -15,7 +15,7 @@
   Helpy.yesHelped = '<%= j t(:yes_helped) %>';
   Helpy.noHelped = '<%= j t(:no_helped) %>';
   <% if tickets? %>
-    Helpy.contactUs = '<a href="<%= new_topic_path(doc_id: @doc.id) %>" class="btn btn-primary btn-lg get-help-button"><%= j t(:start_discussion) %></a>';
+    Helpy.contactUs = '<a href="<%= new_topic_path(doc_id: @doc.id) %>" class="btn btn-primary btn-lg get-help-button"><%= j t(:ask_a_question) %></a>';
   <% else %>
     Helpy.contactUs = '';
   <% end %>
