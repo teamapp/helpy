@@ -28,12 +28,12 @@ module AdminHelper
               end
         val = []
         Doc.replies.with_translations(locale).all.each do |doc|
-            body = (strip_tags(doc.body)).gsub(/\'/, '&#39;')
-            val.push([doc.title, body])
+          val.push([doc.title, doc.id])
         end
         grouped_options[key] = val
       end
     end
+    grouped_options.reject!{ |k,v| v.empty? }
     grouped_options
   end
 

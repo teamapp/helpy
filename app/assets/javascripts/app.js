@@ -232,17 +232,15 @@ Helpy.ready = function(){
 
   // Use or append common reply
   $('#post_reply_id').on('change', function(){
-    var post_body = $('#post_body');
     var common_reply = $('#post_reply_id option:selected');
-
-    // append new line if some text already exists
-    if( post_body.val() && common_reply.val() ) {
-      post_body.val(post_body.val() + "\n\n");
+    if (common_reply.val() != '') {
+      $(this).next('#post_reply_id_link').show();
+      var a = $(this).next('#post_reply_id_link').find('a');
+      a.prop('href', a.data('href').replace('ID', common_reply.val()));
+      $('.disableable').attr('disabled', false);
+    } else {
+      $(this).next('#post_reply_id_link').hide();
     }
-
-    // add content of selected reply
-    post_body.val( post_body.val() + common_reply.val() );
-    $('.disableable').attr('disabled', false);
   });
 
   $('.post-menu span').off().on('click', function(){

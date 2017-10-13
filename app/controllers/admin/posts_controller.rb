@@ -22,8 +22,14 @@ class Admin::PostsController < Admin::BaseController
     @post = Post.new(post_params)
     @post.topic_id = @topic.id
     @post.user_id = current_user.id
+
+    if params[:post][:reply_id].present?
+      @doc = Doc.find(params[:post][:reply_id])
+      @post.body = [@post.body.strip.chomp, "<a href='#{category_doc_path(@doc.category, @doc)}'><h2>#{@doc.title}</h2></a>", @doc.body].reject(&:blank?).join("\n\n")
+    end
+
     get_all_teams
-    
+
     respond_to do |format|
       if @post.save
         format.html {
