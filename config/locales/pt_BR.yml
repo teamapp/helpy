@@ -84,7 +84,7 @@ pt-br:
   my_profile: 'Meu Perfil'
 
   # footer
-  powered_by: "Powered by Helpy. Um projeto de Helpdesk Open Source."
+  powered_by: "Powered by Helpy Um projeto de Helpdesk Open Source."
   get_your_copy: "Garanta uma cópia pelo GitHub"
   version: "Versão:"
 

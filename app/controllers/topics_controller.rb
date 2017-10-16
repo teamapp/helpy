@@ -84,7 +84,7 @@ class TopicsController < ApplicationController
   end
 
   def new
-    @page_title = t(:get_help_button, default: "Open a ticket")
+    @page_title = t(:get_help_button, default: "Ask a Question")
     @topic = Topic.new
     @user = @topic.build_user unless user_signed_in?
     @topic.posts.build

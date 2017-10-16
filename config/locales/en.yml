@@ -11,7 +11,7 @@ en:
   # Navigation
   knowledgebase: "Knowledgebase"
   community: "Community"
-  ask_a_question: "Open a Ticket"
+  ask_a_question: "Ask a Question"
   home: "Home"
   login: "Login"
   logout: "Logout"
@@ -72,13 +72,13 @@ en:
 
   # Get Help
   get_help_header: "Still Need Help?"
-  get_help_button: "Open a ticket"
+  get_help_button: "Ask a Question"
 
   # Profile
   my_profile: 'My Profile'
 
   # footer
-  powered_by: "Powered by Helpy. An Open Source Helpdesk."
+  powered_by: "Powered by Helpy"
   get_your_copy: "Grab your copy on GitHub"
   version: "Version:"
 
