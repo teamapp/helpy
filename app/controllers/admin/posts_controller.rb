@@ -25,7 +25,7 @@ class Admin::PostsController < Admin::BaseController
 
     if params[:post][:reply_id].present?
       @doc = Doc.find(params[:post][:reply_id])
-      @post.body = [@post.body.strip.chomp, "<a href='#{category_doc_path(@doc.category, @doc)}'><h2>#{@doc.title}</h2></a>", @doc.body].reject(&:blank?).join("\n\n")
+      @post.body = [@post.body.strip.chomp, "<a href='#{category_doc_path(@doc.category, @doc)}'><strong>#{@doc.title}</strong></a>", @doc.body].reject(&:blank?).join("\n\n")
     end
 
     get_all_teams
