@@ -159,6 +159,7 @@ group :development, :test do
   gem 'rubocop'
   gem 'scss-lint'
   gem 'awesome_print'
+  gem 'dotenv-rails'
 end
 
 gem 'bulk_insert'
