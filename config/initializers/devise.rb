@@ -2,6 +2,8 @@
 # Many of these configuration options can be set straight in your model.
 
 require 'devise/custom_failure'
+require 'omniauth/strategies/team_app'
+
 Devise.setup do |config|
 
   #This sets up a cookie to generate the above_header with javascript
