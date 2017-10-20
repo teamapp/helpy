@@ -58,7 +58,7 @@ gem 'omniauth-github'
 gem 'omniauth-twitter'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-facebook'
-gem 'omniauth-oauth2'
+gem 'omniauth-oauth2', '~> 1.3.1' ## <- must use 1.3.1 due to this: https://github.com/intridea/omniauth-oauth2/issues/81
 
 # i18n gems
 gem 'rails-i18n', '~> 4.0.0'
