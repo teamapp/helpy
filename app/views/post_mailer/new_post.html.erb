@@ -27,14 +27,5 @@
     <%= simple_format(@post.body) %>
     <%= simple_format(@post.user.signature) if @post.user.signature.present? %>
   </p>
-  <%= render :partial => 'posts/thumbnail', locals: { :model_name => @post } %>
-  <p>
-    <%= t('view_online', default: 'View this online:') %> <%= ticket_url(@topic, host: AppSettings['settings.site_url']) %>
-  </p>
-  <br/>
-  <p>
-    <strong>Powered by Helpy</strong><br/>
-    Get a Free Helpy Support System for your Site at http://helpy.io/
-  </p>
   </body>
 </html>
