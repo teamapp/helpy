@@ -2,7 +2,7 @@
 <div class="col-md-6 border-right">
   <ul class="list-inline">
     <% Devise.omniauth_providers.each do |provider| %>
-      <li style="width:100%;"><%= login_with(provider.to_s) %></li>
+      <li><%= login_with(provider.to_s) %></li>
     <% end %>
   </ul>
 </div>
