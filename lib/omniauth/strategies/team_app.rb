@@ -1,20 +1,28 @@
 module OmniAuth
   module Strategies
     class TeamApp < OmniAuth::Strategies::OAuth2
-      # change the class name and the :name option to match your application name
+      # See: https://github.com/intridea/omniauth-oauth2
+
       option :name, "team_app"
 
       option :client_options, {
         site: ENV['TA_AUTH_URL'],
-        authorize_path: "/oauth/authorize"
+        authorize_path: "/oauth/authorize",
       }
 
-      uid { raw_info["id"] }
+      uid { raw_info['id'] }
 
       info do
         {
+          id: raw_info['id'],
           name: raw_info['name'],
-          email: raw_info['email'],
+          email: raw_info['email']
+        }
+      end
+
+      extra do
+        {
+          'raw_info' => raw_info
         }
       end
 
