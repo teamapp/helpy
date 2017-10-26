@@ -3,6 +3,7 @@
 
 require 'devise/custom_failure'
 require 'omniauth/strategies/team_app'
+require "omniauth-facebook"
 
 Devise.setup do |config|
 

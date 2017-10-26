@@ -14,6 +14,10 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     handle_redirect('devise.google_uid', 'Google')
   end
 
+  def facebook
+    handle_redirect('devise.facebook', 'Facebook')
+  end
+
   def team_app
     handle_redirect('devise.teamapp_uid', 'TeamApp')
   end
@@ -21,7 +25,7 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   private
 
   def handle_redirect(_session_variable, _kind)
-
+    
     # Use the session locale set earlier; use the default if it isn't available.
     I18n.locale = session[:omniauth_login_locale] || I18n.default_locale
 
