@@ -50,6 +50,9 @@ omniauth:
    team_app:
      id: <%= ENV['TA_AUTH_ID'] %>
      secret: <%= ENV['TA_AUTH_SECRET'] %>
+   facebook:
+     id: <%= ENV['FACEBOOK_AUTH_ID'] %>
+     secret: <%= ENV['FACEBOOK_AUTH_SECRET'] %>
    google_oauth2:
      id: <%= ENV['GOOGLE_OAUTH2_ID'] %>
      secret: <%= ENV['GOOGLE_OAUTH2_SECRET'] %>
