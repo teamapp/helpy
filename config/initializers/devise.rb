@@ -300,10 +300,11 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
 #  config.omniauth :google_oauth2, 'APP_ID', 'APP_SECRET', scope: 'user:email'
+
   unless Settings.omniauth.nil? || Settings.omniauth.providers.nil?
     Settings.omniauth.providers.each do |provider|
       if provider[1].id.present?
-        config.omniauth provider[0], provider[1].id, provider[1].secret #, scope: 'user:email'
+        config.omniauth provider[0], provider[1].id, provider[1].secret, authorized_client_ids: (provider[1].authorized_client_ids || [])
       end
     end
   end
