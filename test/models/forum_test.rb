@@ -30,7 +30,9 @@ class ForumTest < ActiveSupport::TestCase
   should validate_length_of(:description).is_at_most(1000)
 
   test "should count number of posts" do
-    assert Forum.find(1).total_posts == 3
+    # For sum of array, see
+    # https://stackoverflow.com/questions/1538789/how-to-sum-array-of-numbers-in-ruby
+    assert Forum.find(1).total_posts == Forum.find(1).topics.collect{|t| t.posts.count}.inject(0, :+)
   end
 
   test "to_param" do
@@ -39,14 +41,14 @@ class ForumTest < ActiveSupport::TestCase
 
   test "creating new lowercase name should be saved in sentence_case" do
     name = "something in lowercase"
-    forum = Forum.create!(name: name, description: "test test test")
-    assert_equal "Something in lowercase", forum.name
+    forum = create :forum, name: name
+    assert_equal name.sentence_case, forum.name
   end
 
   test "when creating a new category, any other capitals should be saved as entered" do
     name = "something in lowercase and UPPERCASE"
-    forum = Forum.create!(name: name, description: "test test test")
-    assert_equal "Something in lowercase and UPPERCASE", forum.name
+    forum = create :forum, name: name
+    assert_equal name.sentence_case, forum.name
   end
 
 end

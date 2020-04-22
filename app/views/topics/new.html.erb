@@ -25,21 +25,19 @@
 <% end %>
 
 <div class="add-form row">
-  <%= simple_form_for(@topic, validate: true) do |f| -%>
+  <%= simple_form_for(@topic, url: topics_path, validate: true, method: :post) do |f| -%>
     <div class="col-md-12">
-      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'shared/error_messages', object: @topic %>
 
       <% unless user_signed_in? %>
-        <%= f.simple_fields_for @user do |u| %>
-
+        <%= f.simple_fields_for @user validate: true do |u| %>
           <%= u.input :email, placeholder: I18n.t('activerecord.attributes.user.email'), autofocus: true, class: 'topic-placeholder' %>
           <%= u.input :name, placeholder: I18n.t('activerecord.attributes.user.name'), class: 'topic-placeholder' %>
-
         <% end %>
       <% end %>
 
       <% if (user_signed_in? && !@widget) || (!user_signed_in? && recaptcha_enabled? && !@widget) %>
-        <% if forums? and tickets? %>
+        <% if forums? && tickets? %>
           <label class="control-label" for="doc_active"> <%= t(:should_message_be_private) %> </label>
           <%= f.collection_radio_buttons :private, [[true, t(:only_support_can_respond)] ,[false, t(:responses_can_come_from_everyone)]], :first, :last, item_wrapper_class: 'radio', item_label_class: 'radio-label', collection_wrapper_tag: :div %>
           <%= f.input(:forum_id, collection: @forums, :label => t(:forum_name), locale: I18n.locale, prompt: nil) %>
@@ -59,13 +57,15 @@
         $(document).ready(function(){
           Helpy.showGroup();
         });
+        var whitelist = [<%= extension_whitelist.html_safe %>];
+        var blacklist = [<%= extension_blacklist.html_safe %>];
       </script>
       <% end %>
-
+      
       <% if teams = all_teams %>
         <%= f.input(:team_list, collection: teams, :label => t(:assign_to), locale: I18n.locale, prompt: "", style: "display:none;") if teams? and teams.count > 0 %>
       <% end %>
-
+      
       <%= f.input :name, input_html: { value: params[:q], class: 'suggest-results' }, :size => 40,  placeholder: I18n.t(:subject), label: I18n.t(:subject), class: 'disable-empty topic-placeholder' %>
 
       <div class="suggestion-results-container hidden">
@@ -74,14 +74,14 @@
         <div class="suggestion-results">
         </div>
       </div>
-
-      <%= f.simple_fields_for :posts do |p| %>
-        <%= p.input :body, input_html: {:rows => 8, :cols => 60, placeholder: I18n.t(:how_can_we_help), label: 'Message', class: 'disable-empty form-control topic-placeholder'} %>
+      
+      <%= f.simple_fields_for :posts, validate: true do |p| %>
+        <%= p.input :body, label: I18n.t(:message), input_html: {:rows => 8, :cols => 60, placeholder: I18n.t(:how_can_we_help), label: 'Message', class: 'disable-empty form-control topic-placeholder'} %>
         <% unless cloudinary_enabled? %>
-          <%= p.file_field :attachments, multiple: true %>
-          <ul class="list-inline" id="attachments">
+          <%= p.file_field :attachments, multiple: true, onchange: "Helpy.validateFiles(this, whitelist, blacklist);" %>
+          <!-- <ul class="list-inline" id="attachments"> -->
             <%#= render partial: 'posts/attachment', locals: { :model_name => @post } %>
-          </ul>
+          <!-- </ul> -->
         <% end %>
       <% end %>
 
@@ -91,13 +91,13 @@
         <% end %>
       </div>
 
-
-
       <% if !user_signed_in? && recaptcha_enabled? && !@widget %>
         <div class="form-group">
           <%= recaptcha_tags %>
         </div>
       <% end %>
+
+      <%= url_field 'topic', 'url', value: '', placeholder: 'http://', id: 'topic-url' %>
 
       <%= hidden_field_tag :client_id %>
       <%= f.hidden_field :doc_id, value: params[:doc_id] if params[:doc_id] %>
@@ -106,7 +106,7 @@
       <!--<label>Tags:</label><br/>-->
       <%#= text_field_tag :tags %>
 
-      <%= f.submit t(:submit_start_discussion, default: 'Start Discussion'), class: 'btn btn-warning disableable', disabled: 'disabled' %>
+      <%= f.submit t(:submit_start_discussion, default: 'Start Discussion'), class: 'btn btn-warning' %>
     </div>
   <% end -%>
 </div>

@@ -25,10 +25,15 @@ String.prototype.capitalize = function() {
 var Helpy = Helpy || {};
 Helpy.admin = function(){
 
+  $(".alert").delay(2000).slideUp(500, function(){
+      $(".alert").alert('close');
+  });
+
   $('div.sortable').sortable({
     items: '.item',
     axis: 'y',
     cursor: 'move',
+    //containment: ".front-categories" ,
     sort: function(event, ui) {
       ui.item.addClass('active-item-shadow');
     },
@@ -49,23 +54,24 @@ Helpy.admin = function(){
     }
   });
 
-  // $('.settings-link').off().on('click', function(){
-  //   // Clean up any select-styled links
-  //   $('.settings-link').removeClass('active-settings-link');
-  //
-  //   // Hide and show the grid/panels
-  //   $('.settings-grid').addClass('hidden');
-  //   $('.settings-panel').removeClass('hidden');
-  //
-  //   var $this = $(this);
-  //   var showthis = $this.data('target');
-  //   $('a[data-target=' + showthis + ']').addClass('active-settings-link');
-  //   $('.settings-section').addClass('hidden');
-  //   $('.settings-section.' + showthis).removeClass('hidden');
-  //   $('.agent-header').addClass('hidden');
-  //   $('h2#setting-header').text('Settings: ' + $this.text().capitalize());
-  //   return false;
-  // });
+
+  $('.settings-link').off().on('click', function(){
+    // Clean up any select-styled links
+    $('.settings-link').removeClass('active-settings-link');
+  
+    // Hide and show the grid/panels
+    $('.settings-grid').addClass('hidden');
+    $('.settings-panel').removeClass('hidden');
+  
+    var $this = $(this);
+    var showthis = $this.data('target');
+    $('a[data-target=' + showthis + ']').addClass('active-settings-link');
+    $('.settings-section').addClass('hidden');
+    $('.settings-section.' + showthis).removeClass('hidden');
+    $('.agent-header').addClass('hidden');
+    $('h2#setting-header').text('Settings: ' + $this.text().capitalize());
+    return false;
+  });
 
   // You have to delegate this to the document or it does not work reliably
   // See http://stackoverflow.com/questions/18545941/jquery-on-submit-event
@@ -84,17 +90,20 @@ Helpy.admin = function(){
     theme: 'bootstrap'
   });
 
-  $('.reports-menu-toggle').off().on('click', function(){
-    var $reports_nav = $('.reports-nav');
-    if ($reports_nav.is(":visible")) {
-      $reports_nav.addClass('hidden-xs').addClass('hidden-sm');
-    } else {
-      $reports_nav.removeClass('hidden-xs').removeClass('hidden-sm');
-    }
+  // $('.reports-menu-toggle').off().on('click', function(){
+  //   var $reports_nav = $('.reports-nav');
+  //   if ($reports_nav.is(":visible")) {
+  //     $reports_nav.addClass('hidden-xs').addClass('hidden-sm');
+  //   } else {
+  //     $reports_nav.removeClass('hidden-xs').removeClass('hidden-sm');
+  //   }
+  //
+  // });
 
+  $('.bs-toggle').bootstrapSwitch({
+    onText: '&nbsp;&nbsp;&nbsp;&nbsp;',
+    offText: '&nbsp;&nbsp;&nbsp;&nbsp;'
   });
-
-  $('.bs-toggle').bootstrapSwitch();
 
   // Onboarding flow
   $('.panel-link').off().on('click', function(){
@@ -117,11 +126,14 @@ Helpy.admin = function(){
     var chosen = $(".settings-section.email select").val();
       $('.imap-settings').addClass('hidden');
       $('.pop3-settings').addClass('hidden');
+      $('.spam-protection').removeClass('hidden');
     if (chosen == 'pop3' ){
       $('.pop3-settings').removeClass('hidden');
+      $('.spam-protection').addClass('hidden');
     }
     if (chosen == 'imap' ){
       $('.imap-settings').removeClass('hidden');
+      $('.spam-protection').addClass('hidden');
     }
   });
 
@@ -169,6 +181,47 @@ Helpy.admin = function(){
     $('#user_search').focus();
   });
 
+  // Highlight the last clicked view
+  $('.nav-item').off().on('click', function(){
+    var $this = $(this);
+    $('.nav-item').removeClass('nav-active');
+    $this.addClass('nav-active');
+  });
+
+  // Highlight the last clicked view
+  $('.nav-item').on('mouseover', function(){
+    var $this = $(this);
+    $this.addClass('nav-over');
+  });
+  // Highlight the last clicked view
+  $('.nav-item').on('mouseout', function(){
+    var $this = $(this);
+    $this.removeClass('nav-over');
+  });
+
+  Helpy.ticketMenu();
+
+};
+
+Helpy.ticketMenu = function() {
+  // Show/hide ticket menu
+  $('.show-ticket-menu').on('click', function(){
+    var $ticketNav = $('#admin-left-nav');
+
+    if ($ticketNav.hasClass('open')) {
+      $ticketNav.removeClass('open').addClass('hidden-xs').addClass('hidden-sm').removeClass('left-dropdown');
+    } else {
+      $ticketNav.addClass('open');
+      $ticketNav.removeClass('hidden-xs').removeClass('hidden-sm').addClass('left-dropdown');
+    }
+  });
+
+  $('.show-ticket-menu.open').on('click', function(){
+    var $ticketNav = $('#admin-left-nav');
+
+    $ticketNav.removeClass('open');
+    $ticketNav.addClass('hidden-xs');
+  });
 };
 
 Helpy.showPanel = function(panel) {

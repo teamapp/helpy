@@ -1,3 +1,4 @@
+
 # == Schema Information
 #
 # Table name: categories
@@ -13,9 +14,9 @@
 #  active           :boolean          default(TRUE)
 #  permalink        :string
 #  section          :string
-#  visibility       :string           default('all')
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
+#  visibility       :string           default("all")
 #
 
 class Category < ActiveRecord::Base
@@ -24,11 +25,13 @@ class Category < ActiveRecord::Base
 
   has_many :docs
   has_paper_trail
+  has_ancestry
 
   acts_as_taggable_on :teams
 
   translates :name, :keywords, :title_tag, :meta_description, versioning: :paper_trail
   globalize_accessors #:locales => I18n.available_locales, :attributes => [:name, :keywords, :title_tag, :meta_description]
+
 
   PUBLIC_VIEWABLE   = %w[all public]
   INTERNAL_VIEWABLE = %w[all internal]
@@ -44,9 +47,7 @@ class Category < ActiveRecord::Base
   scope :internally, -> { where(visibility: INTERNAL_VIEWABLE) }
   scope :only_internally, -> { where(visibility: 'internal') }
   scope :without_system_resource, -> { where.not(name: SYSTEM_RESOURCES)  }
-
-  before_destroy :non_deleteable?
-  after_commit :rebuild_search, only: :update, if: -> { active_changed? || visibility_changed? }
+  after_commit :rebuild_search, only: [:update, :destroy]
 
   include RankedModel
   ranks :rank
@@ -61,8 +62,8 @@ class Category < ActiveRecord::Base
     globalize.stash.contains?(Globalize.locale, name) ? globalize.stash.read(Globalize.locale, name) : translation_for(Globalize.locale).send(name)
   end
 
-  def non_deleteable?
-    return false if name == "Common Replies"
+  def system_resource?
+    SYSTEM_RESOURCES.include?(name)
   end
 
   def publicly_viewable?
@@ -75,6 +76,17 @@ class Category < ActiveRecord::Base
 
   def rebuild_search
     RebuildSearchJob.perform_later
+  end
+
+  def self.reorganize(structure, parent_id=nil, parent_rank=0)
+    logger.info structure
+    structure.each_with_index do |s,i|
+      category = Category.find(s[1]["id"])
+      category.rank = parent_rank+i+1
+      category.parent_id = parent_id
+      category.save!
+      Category.reorganize(s[1]["children"], category.id, category.rank+100000) if s[1]["children"].present?
+    end
   end
 
 end

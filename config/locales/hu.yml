@@ -39,7 +39,8 @@ hu:
 
   # Community
   forum_name: "Téma"
-  subject: "Tárgy"
+  subject: &subject "Tárgy"
+  message: "Üzenet"
   last_activity: "Utolsó Aktivitás"
   topic: "Beszélgetés"
   replies: "Válaszok"
@@ -140,12 +141,13 @@ hu:
 
   # Discussion controls
   change_status: Státusz Módosítása
-  status: Státusz
+  status: &status Státusz
   mark_closed: Megoldottnak jelölés
   reopen: Újranyitás
   mark_spam: Levélszemét
   mark_new: Újnak jelölés
-  assign_agent: Ügynökhöz rendelés
+  assign_agent: &assign_agent Ügynökhöz rendelés
+  # tag_with: &tag_with Tag Ticket
   selected_messages:
     one: "1 kiválasztott üzenet"
     two: "2 kiválasztott üzenet"
@@ -168,12 +170,17 @@ hu:
   contact_info: Kapcsolat
   social_info: Social
   edit_user: Felhasználó szerkesztés
+#  delete_user: Delete User
   work_phone: munka
   cell_phone: mobil
+  # scrub_user: "Anonymize User"
+  # anonymize_user_warning: "Are you sure you want to anonymize %{user_name}? This will permanently anonymize the user's personal data but retain all of their tickets and public posts."
+  # delete_user_warning: "Are you sure you want to delete %{user_name}? This will permanently remove the user and all of their tickets, posts, replies and forum topics."
 
   # Priorities
-  # select_priority: Select Priority
+  # select_priority: &priority Select Priority
   # vip_priority: VIP
+  # very_high_priority: Very High
   # high_priority: High
   # normal_priority: Normal
   # low_priority: Low
@@ -244,6 +251,7 @@ hu:
   # Mail messages
   new_user_subject: "A(z) %{site_name} üdvözöl Téged"
   hello: "Helló %{user_name}"
+  thank_you: "Köszönjük!"
   new_user: "Köszönjük, hogy felkerestél minket.  Ügyfélszolgálatunk megkapta üzeneted, válaszunkkal rövidesen jelentezünk."
   account_generated: "Létrehoztunk egy felhasználói fiókot Neked. Bejelentkezéshez használd ezt a linket:"
   above_this_line: "Kérjük, ügyelj rá, hogy válaszodat a vonal felett írd meg"
@@ -255,6 +263,7 @@ hu:
   notify_new_private: "Egy új privát kérdés érekezett erről a címről: %{user_name}:"
   notify_new_public: "Egy új publikus kérdést fel %{user_name}:"
   notify_new_reply: "Egy új ügyfélválaszt kaptunk %{user_name} felhasználótól:"
+  # notify_user_delete: "User %{user_name} was scheduled for permanent deletion."
   to_reply: 'Válaszolj erre az üzenetre közvetlenül, vagy online:'
 
   # Notifications settings panel
@@ -296,7 +305,7 @@ hu:
     one: "<strong>%{period}</strong> a felhasználók egy új beszélgetést kezdtek"
     other: "<strong>%{period}</strong> a felhasználók <strong>%{count} új beszélgetést kezdtek</strong>"
   insights_blurb_two: "melyből munkatársaid <strong>%{number_replied} (%{percentage_replied}) kérdést megválaszoltak</strong>"
-  insights_blurb_three: "a válaszidő mediánja <strong>%{response_time}</strong> volt"
+  insights_blurb_three_html: "a válaszidő mediánja <strong>%{response_time}</strong> volt"
   no_discussions: "Nincs új beszélgetés erre az időszakra: <strong>%{period}</strong>"
   assigned_topics: "Hozzárendelt Témák"
   responded: "Megválaszolt"

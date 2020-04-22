@@ -34,6 +34,20 @@
 			<%= content_tag :li, link_to(t(:community), forums_path) if forums? %>
 			<%= content_tag :li, link_to(t(:ask_a_question), new_topic_path), data: { hook: 'question_nav' } if tickets? || forums? %>
 			<%= content_tag :li, link_to(t(:locale), select_locale_path) %>
+			<li class="search-li">
+				<div class="form-group has-feedback right-inner-addon">
+				  <%= form_tag result_path, method: :get, id: 'search-form', remote: (params[:controller] == 'result') do %>
+				    <div class="input-group">
+				      <%= text_field_tag('q', nil, placeholder: t(:search_placeholder, default: "Enter a keyword, topic, or question"), id: 'search-field', class: 'form-control', value: params[:q]) %>
+				      <div class="input-group-btn">
+				        <button type="submit" class="btn btn-default search-btn" aria-label="Search">
+				          <span class="glyphicon glyphicon-search"></span>
+				        </button>
+				      </div>
+				    </div>
+				  <% end # form %>
+				</div>
+			</li>
 		</ul>
 	</nav>
 
@@ -48,7 +62,12 @@
 						<ul class="list-inline" data-hook="header-mini-nav">
               <%= content_tag :li, link_to("#{t(:back_to).titleize} #{AppSettings['settings.parent_company']}", AppSettings['settings.parent_site']), class: 'hidden-xs' %>
 							<%= content_tag :li, link_to(t(:ask_a_question), new_topic_path), data: { hook: 'question_nav' }, class: 'hidden-xs' if forums? || tickets? %>
-							<li data-no-turbolink><a href="#right-menu" id="right-menu"><h2 class="fa fa-bars"></h2></a></li>
+							<% if user_signed_in? %>
+							<%= content_tag :li, link_to(t(:logout), destroy_user_session_path), class: 'hidden-xs' %>
+							<% else %>
+							<%= content_tag :li, link_to(t('devise.sessions.new.sign_in'), '#', class: 'login-link hidden-xs', data: { toggle: "modal", target: "#login-modal" }) %>
+							<% end %>
+							<li data-no-turbolink><a href="#right-menu" id="right-menu"><h2 class="fas fa-bars"></h2></a></li>
 						</ul>
 					</div>
 				</div>
@@ -86,12 +105,26 @@
 $('#right-menu').sidr({
   name: 'nav',
   side: 'right',
-	source: '#menu'
+	source: '#menu',
+  onOpen: function(){
+    // Re-name font Icons to correct classnames
+    $("[class*='sidr-class-glyphicon'], [class*='sidr-class-btn']").attr('class',
+      function( i, c ) {
+        c = c.replace(/sidr-class-/g, '');
+        return c;
+      }
+    );
+  }
 });
 
 // Close menu on click
 $('ul.nav').off().on('click', function(){
  $.sidr('close', 'nav');
+});
+
+// Close menu before navigating so turbolinks does not cache menu open
+$(document).on('page:before-change', function () {
+  $.sidr('close', 'nav');
 });
 </script>
 <%= "<script src='/assets/widget.v1.js'></script>".html_safe if AppSettings['widget.show_on_support_site'] == '1' %>

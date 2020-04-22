@@ -1,5 +1,11 @@
 # General Settings:
 
+AppSettings.defaults["branding.ticketing_color"] = "#245566"
+AppSettings.defaults["branding.ticketing_bg_color"] = "#f6f7e8"
+AppSettings.defaults["branding.ticketing_bg_image"] = ""
+AppSettings.defaults["branding.display_branding"] = "1"
+
+AppSettings.defaults["settings.enforce_ssl"] = "0"
 AppSettings.defaults["settings.parent_site"] = Settings.parent_site
 AppSettings.defaults["settings.parent_company"] = Settings.parent_company
 AppSettings.defaults["settings.site_url"] = Settings.site_url
@@ -17,6 +23,15 @@ AppSettings.defaults["settings.tickets"] = Settings.tickets
 AppSettings.defaults["settings.knowledgebase"] = Settings.knowledgebase
 AppSettings.defaults["settings.teams"] = Settings.teams
 AppSettings.defaults["settings.welcome_email"] = Settings.welcome_email
+AppSettings.defaults['settings.global_bcc'] = []
+AppSettings.defaults['settings.default_channel'] = 'email'
+AppSettings.defaults['settings.include_ticket_history'] = '1'
+AppSettings.defaults['settings.include_ticket_body'] = '1'
+AppSettings.defaults['settings.default_private'] = '0'
+AppSettings.defaults['settings.anonymous_access'] = '0'
+AppSettings.defaults['settings.anonymous_salt'] = 'salt'
+AppSettings.defaults['settings.extension_whitelist'] = ''
+AppSettings.defaults['settings.extension_blacklist'] = 'ade, adp, apk, appx, appxbundle, bat, cab, chm, cmd, com, cpl, dll, dmg, exe, hta, ins, isp, iso, jar, js, jse, lib, lnk, mde, msc, msi, msix, msixbundle, msp, mst, nsh, pif, ps1, scr, sct, .shb, sys, vb, vbe, vbs, vxd, wsc, wsf, wsh'
 
 # Webhook Integrations
 
@@ -32,23 +47,23 @@ AppSettings.defaults["design.footer_mini_logo"] = Settings.app_large_logo
 AppSettings.defaults["design.css"] = ""
 AppSettings.defaults["design.header_js"] = ""
 AppSettings.defaults["design.footer_js"] = ""
-AppSettings.defaults["css.search_background"] = "feffe9"
-AppSettings.defaults["css.top_bar"] = "3cceff"
-AppSettings.defaults["css.link_color"] = "004084"
-AppSettings.defaults["css.form_background"] = "F0FFF0"
-AppSettings.defaults["css.still_need_help"] = "ffdf91"
+AppSettings.defaults["css.search_background"] = ""
+AppSettings.defaults["css.top_bar"] = ""
+AppSettings.defaults["css.link_color"] = ""
+AppSettings.defaults["css.form_background"] = ""
+AppSettings.defaults["css.still_need_help"] = ""
 AppSettings.defaults["css.main_color"] = ""
 AppSettings.defaults["css.accent_color"] = ""
 AppSettings.defaults["css.form_color"] = ""
 
 # Theme:
 
-AppSettings.defaults["theme.active"] = "light"
+AppSettings.defaults["theme.active"] = "singular"
 
 # i18n:
 
 AppSettings.defaults["i18n.default_locale"] = "en"
-AppSettings.defaults["i18n.available_locales"] = ["en","es","fr","de"]
+AppSettings.defaults["i18n.available_locales"] = ["en","es","fr","de","fi"]
 
 # Widget:
 
@@ -71,6 +86,9 @@ AppSettings.defaults["email.smtp_mail_password"] = Settings.smtp_mail_password
 AppSettings.defaults["email.mail_smtp"] = Settings.mail_smtp
 AppSettings.defaults["email.mail_port"] = Settings.mail_port
 AppSettings.defaults["email.mail_domain"]= Settings.mail_domain
+AppSettings.defaults["email.spam_assassin_reject"]= 4
+AppSettings.defaults["email.spam_assassin_filter"]= 2
+AppSettings.defaults["email.email_blacklist"] = ""
 
 # notifications
 
