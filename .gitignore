@@ -32,3 +32,6 @@ public/uploads
 # Docker stuff
 .env
 certs
+
+# local
+Helpy_Notes.md
