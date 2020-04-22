@@ -61,7 +61,7 @@ gem 'omniauth-github'
 gem 'omniauth-twitter'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-facebook', '~> 4.0.0'
-gem 'omniauth-oauth2', '~> 1.3.1' ## <- must use 1.3.1 due to this: https://github.com/intridea/omniauth-oauth2/issues/81
+gem 'omniauth-oauth2'
 
 # i18n gems
 gem 'rails-i18n', '~> 4.0.9'
@@ -169,7 +169,7 @@ group :development, :test do
   gem 'annotate'
   gem 'brakeman', require: false
   gem 'rubocop'
-  gem 'scss-lint'
+  gem 'scss_lint'
   gem 'awesome_print'
   gem 'dotenv-rails'
   gem 'rb-readline'
