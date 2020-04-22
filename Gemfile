@@ -110,7 +110,7 @@ gem "bootstrap-switch-rails"
 gem 'bootstrap-datepicker-rails'
 gem 'bootstrap-select-rails'
 
-gem 'config', '~> 1.1.0', git: 'https://github.com/railsconfig/config.git'
+gem 'config'
 
 # Email/Mail Handling
 gem 'daemons'
