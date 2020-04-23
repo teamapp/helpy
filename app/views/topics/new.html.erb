@@ -30,7 +30,7 @@
       <%= render 'shared/error_messages', object: @topic %>
 
       <% unless user_signed_in? %>
-        <%= f.simple_fields_for @user validate: true do |u| %>
+        <%= f.simple_fields_for @user, validate: true do |u| %>
           <%= u.input :email, placeholder: I18n.t('activerecord.attributes.user.email'), autofocus: true, class: 'topic-placeholder' %>
           <%= u.input :name, placeholder: I18n.t('activerecord.attributes.user.name'), class: 'topic-placeholder' %>
         <% end %>
@@ -106,7 +106,7 @@
       <!--<label>Tags:</label><br/>-->
       <%#= text_field_tag :tags %>
 
-      <%= f.submit t(:submit_start_discussion, default: 'Start Discussion'), class: 'btn btn-warning' %>
+      <%= f.submit t(:submit_start_discussion, default: 'Start Discussion'), class: 'btn btn-warning disableable', disabled: 'disabled' %>
     </div>
   <% end -%>
 </div>
