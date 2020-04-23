@@ -169,7 +169,7 @@ group :development, :test do
   gem 'annotate'
   gem 'brakeman', require: false
   gem 'rubocop'
-  gem 'scss_lint'
+  gem 'scss_lint', require: false
   gem 'awesome_print'
   gem 'dotenv-rails'
   gem 'rb-readline'
