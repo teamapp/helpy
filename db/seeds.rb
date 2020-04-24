@@ -44,17 +44,17 @@ user_scott = User.create!(
 )
 
 
-tag = ActsAsTaggableOn::Tag.create(name: 'sales', description: 'Sales Inquiries')
-ActsAsTaggableOn::Tagging.create(tag_id: tag.id, context: "teams")
+# tag = ActsAsTaggableOn::Tag.create(name: 'sales', description: 'Sales Inquiries')
+# ActsAsTaggableOn::Tagging.create(tag_id: tag.id, context: "teams")
 
-tag = ActsAsTaggableOn::Tag.create(name: 'billing', description: 'Billing Inquiries')
-ActsAsTaggableOn::Tagging.create(tag_id: tag.id, context: "teams")
+# tag = ActsAsTaggableOn::Tag.create(name: 'billing', description: 'Billing Inquiries')
+# ActsAsTaggableOn::Tagging.create(tag_id: tag.id, context: "teams")
 
-tag = ActsAsTaggableOn::Tag.create(name: 'tier_one', description: 'Tier one support')
-ActsAsTaggableOn::Tagging.create(tag_id: tag.id, context: "teams")
+# tag = ActsAsTaggableOn::Tag.create(name: 'tier_one', description: 'Tier one support')
+# ActsAsTaggableOn::Tagging.create(tag_id: tag.id, context: "teams")
 
-tag = ActsAsTaggableOn::Tag.create(name: 'tier_two', description: 'Tier two support')
-ActsAsTaggableOn::Tagging.create(tag_id: tag.id, context: "teams")
+# tag = ActsAsTaggableOn::Tag.create(name: 'tier_two', description: 'Tier two support')
+# ActsAsTaggableOn::Tagging.create(tag_id: tag.id, context: "teams")
 
 
 # Forums
@@ -98,24 +98,23 @@ Forum.create(
 )
 
 # Knowledgebase Categories
-Category.create(name:'Common Replies', title_tag: 'Common Agent Replies', meta_description: 'Common replies to questions (Visible only to agents)', front_page: false, active: false, visibility: 'internal')
-templates = Category.create(name:'Email templates', title_tag: 'Email Templates',  meta_description: 'Emails used by the system', front_page: false, active: false, visibility: 'internal')
-Category.create(name:'Getting Started',icon: 'eye-open', title_tag: 'Getting Started',meta_description:'Learn how to get started with our solution', front_page: true)
-Category.create(name:'Top Issues',icon: 'exclamation-sign', title_tag: 'Solutions to Top Issues',meta_description:'Answers to our most frequent issues', front_page: true)
-Category.create(name:'General Questions', icon: 'question-sign', title_tag: 'Answers General Questions',meta_description:'If you have a question of a more general nature, you might find the answer here', front_page: true)
-Category.create(name:'Troubleshooting', icon: 'ok-circle', title_tag: 'Troubleshooting',meta_description:'Got a problem? Start here to learn more about solving it', front_page: true)
+# Category.create(name:'Common Replies', title_tag: 'Common Agent Replies', meta_description: 'Common replies to questions (Visible only to agents)', front_page: false, active: false, visibility: 'internal')
+# templates = Category.create(name:'Email templates', title_tag: 'Email Templates',  meta_description: 'Emails used by the system', front_page: false, active: false, visibility: 'internal')
+# Category.create(name:'Getting Started',icon: 'eye-open', title_tag: 'Getting Started',meta_description:'Learn how to get started with our solution', front_page: true)
+# Category.create(name:'Top Issues',icon: 'exclamation-sign', title_tag: 'Solutions to Top Issues',meta_description:'Answers to our most frequent issues', front_page: true)
+# Category.create(name:'General Questions', icon: 'question-sign', title_tag: 'Answers General Questions',meta_description:'If you have a question of a more general nature, you might find the answer here', front_page: true)
+# Category.create(name:'Troubleshooting', icon: 'ok-circle', title_tag: 'Troubleshooting',meta_description:'Got a problem? Start here to learn more about solving it', front_page: true)
 
 # Create email header and footer tempalte
-
-templates.docs.create!(title: 'Customer_header', body: '<!-- -->')
-templates.docs.create!(title: 'Customer_footer', body:'<p style="color: #666;">
-<small>
-<strong>Powered by Helpy</strong><br>
-Get a Free Helpy Support System for your Site at
-<a href="https://helpy.io/">https://helpy.io/</a>
-</small>
-</p>
-<p style="color: #666;"><small>%ticket_link%</small></p>')
+# templates.docs.create!(title: 'Customer_header', body: '<!-- -->')
+# templates.docs.create!(title: 'Customer_footer', body:'<p style="color: #666;">
+# <small>
+# <strong>Powered by Helpy</strong><br>
+# Get a Free Helpy Support System for your Site at
+# <a href="https://helpy.io/">https://helpy.io/</a>
+# </small>
+# </p>
+# <p style="color: #666;"><small>%ticket_link%</small></p>')
 
 
 # Create first example tickets
