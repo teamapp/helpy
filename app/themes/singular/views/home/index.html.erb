@@ -2,6 +2,18 @@
 
 <% if knowledgebase? %>
   <div class="row">
+    <div class="category category-panel col-md-12 vcenter">
+      <div class="col-md-2 text-center">
+        <%= content_tag :i, nil, class: "glyphicon glyphicon-globe home-icon" %>
+      </div>
+      <div class="col-md-10">
+        <h4><%= link_to "Community Forum", forums_path %></h4>
+        <p>
+          Join our Community Forum.
+        </p>
+      </div>
+    </div>
+
     <% @categories.each do |category| %>
       <%# if category.docs.all.with_translations(I18n.locale).count > 0 %>
         <%= render partial: 'categories/category_panel', object: category %>
