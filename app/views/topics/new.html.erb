@@ -85,6 +85,18 @@
         <% end %>
       <% end %>
 
+      <%# insert device dropdown here %>
+      <div>
+        <label for="cars">Device *</label>
+        <select id="cars" name="cars" class="disable-empty form-control topic-placeholder">
+          <option value="notapplicable">Not Applicable</option>
+          <option value="android">Android</option>
+          <option value="ios">iOS</option>
+          <option value="web">Web</option>
+        </select>
+      </div>
+      <br>
+      
       <div class="add-screenshots">
         <% if !@widget %>
         <%= attachinary_file_field_tag 'topic[screenshots]', @topic, :screenshots if cloudinary_enabled? %>

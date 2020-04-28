@@ -20,12 +20,29 @@
             place_holder: t('activerecord.attributes.user.account_number', default: 'Account Number') if user.account_number.present? %>
             <br/>
           <% end %>
+          <!--
           <%= best_in_place_if !user.is_agent?, user, :company, as: :input, url: admin_user_path(user),
           place_holder: t('click_to_edit', what: t('activerecord.attributes.user.company'), default: 'click to edit %{what}') %><br/>
+          -->
           <%= best_in_place_if !user.is_agent?, user, :email, as: :input, url: admin_user_path(user) %><br/>
 
         </span>
       </div>
+
+      <!-- if user signed in to helpy with teamapp display registered user yes and teamapp id else unknown -->
+      <div id="user-contact-info" class="user-info">
+        <div class="tiny-header">Registered User:</div>
+        <% if user.provider == 'team_app' %>
+          <p>Yes</p>
+          <br>
+          <div class="tiny-header">Team App User ID:</div>
+          <p><%= user.uid %></p>
+        <% else %>
+          <p>Unknown</p>
+        <% end %>
+      </div>
+
+      <!--
       <div id="user-contact-info" class="user-info">
         <div class="tiny-header"><%= t(:contact_info, default: "Contact") %>:</div>
         <%= best_in_place_if !user.is_agent?, user, :street, as: :input, url: admin_user_path(user),
@@ -47,6 +64,7 @@
         <%= t(:cell_phone, default: "cell") %>: <%= best_in_place_if !user.is_agent?, user, :cell_phone,
         as: :input, url: admin_user_path(user), place_holder: t('click_to_edit', what: '', default: 'click to edit %{what}') %><br/>
       </div>
+      -->
       <div id="user-contact-info" class="user-info">
         <div class="tiny-header"><%= t(:notes, default: "Notes") %>:</div>
         <%= best_in_place_if !user.is_agent?, user, :notes, as: :textarea, url: admin_user_path(user),
