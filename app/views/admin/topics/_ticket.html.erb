@@ -63,7 +63,6 @@
         </div>
 
         <br/>
-
         <div class="form-group">
           <%= f.attachinary_file_field :screenshots if cloudinary_enabled? %>
           <%= f.file_field :attachments, multiple: true unless cloudinary_enabled? %>
