@@ -26,6 +26,8 @@
 #  channel          :string           default("email")
 #  kind             :string           default("ticket")
 #  priority         :integer          default(1)
+#  ##                 custom additions               ##
+#  device           :string           default("not selected")
 #
 
 class TopicsController < ApplicationController
