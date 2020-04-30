@@ -13,7 +13,8 @@ class TopicMailer < ApplicationMailer
       cc: @post.cc,
       bcc: @post.bcc,
       from: @topic.from_email_address,
-      subject: "[#{AppSettings['settings.site_name']}] ##{@topic.id}-#{@topic.name}"
+      subject: "Ticket ##{@topic.id}"
+      # subject: "[#{AppSettings['settings.site_name']}] ##{@topic.id}-#{@topic.name}"
       )
   end
 

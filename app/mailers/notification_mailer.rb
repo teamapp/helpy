@@ -31,7 +31,8 @@ class NotificationMailer < ApplicationMailer
       to: @recipient.email,
       bcc: @bcc,
       from: AppSettings['email.admin_email'],
-      subject: "[#{AppSettings['settings.site_name']}] ##{@topic.id}-#{@topic.name}"
+      subject: "Ticket ##{@topic.id}"
+      # subject: "[#{AppSettings['settings.site_name']}] ##{@topic.id}-#{@topic.name}"
       )
   end
 end
