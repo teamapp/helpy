@@ -33,7 +33,7 @@ class PostMailer < ActionMailer::Base
       cc: @post.cc,
       bcc: @post.bccs,
       from: @topic.from_email_address,
-      subject: "Post ##{@topic.id}"
+      subject: "Ticket ##{@topic.id}"
       # subject: "[#{AppSettings['settings.site_name']}] ##{@topic.id}-#{@topic.name}"
       )
   end
