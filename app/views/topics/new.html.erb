@@ -31,7 +31,11 @@
 
       <% unless user_signed_in? %>
         <%= f.simple_fields_for @user, validate: true do |u| %>
-          <%= u.input :email, placeholder: I18n.t('activerecord.attributes.user.email'), autofocus: true, class: 'topic-placeholder' %>
+          <!-- pcavalot / add note to use team app email, had to add label false to email input and add custom label -->
+          <%= u.label :email, 'Email *' do %>
+            Email * <em style="font-size:0.8em;">(please use the same email as your Team App account)</em>
+          <% end %>
+          <%= u.input :email, placeholder: I18n.t('activerecord.attributes.user.email'), autofocus: true, class: 'topic-placeholder', label: false %>
           <%= u.input :name, placeholder: I18n.t('activerecord.attributes.user.name'), class: 'topic-placeholder' %>
         <% end %>
       <% end %>
@@ -85,7 +89,7 @@
         <% end %>
       <% end %>
 
-      <!-- added device select field -->
+      <!-- pcavalot / added device select field -->
       <label class="control-label" for="doc_active">Device *</label>
       <%= f.select(:device, ['Android', 'iOS', 'Web'], {}, { :class => 'disable-empty form-control topic-placeholder' }) %>
       <br>

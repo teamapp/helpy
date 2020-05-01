@@ -293,9 +293,10 @@ en:
   reply_option: Reply
   internal_note: Internal Note
   mark_as_resolved: Mark as resolved
-  upvote:
-    one: "Upvote | %{count}"
-    other: "Upvote | %{count}"
+  # pcavalot / changed upvote to like
+  likes:
+    one: "Likes  %{count}"
+    other: "Likes  %{count}"
 
   # Content
   new_category: New Category

@@ -28,9 +28,11 @@
         <% if post.topic.forum.allow_post_voting == true %>
   			<div id="post-vote-<%= post.id %>" class="btn btn-default">
   				<% if post.kind == 'first' %>
-  				<%= link_to t(:upvote, count: post.topic.points), up_vote_path(post.topic.id), method: :post, remote: true, class: 'topic-vote', data: {voted: post.topic.to_param}, id: "upvote_#{post.topic.id}" %>
+					<!-- pcavalot / change upvote to likes -->
+  				<%= link_to t(:likes, count: post.topic.points), up_vote_path(post.topic.id), method: :post, remote: true, class: 'topic-vote', data: {voted: post.topic.to_param}, id: "upvote_#{post.topic.id}" %>
   				<% else %>
-  				<%= link_to t(:upvote, count: post.points), post_vote_path(post.id), method: :post, remote: true, class: 'post-vote', data: {voted: post.topic.to_param}, id: "upvote_#{post.topic.id}" %>
+					<!-- pcavalot / change upvote to likes -->
+  				<%= link_to t(:likes, count: post.points), post_vote_path(post.id), method: :post, remote: true, class: 'post-vote', data: {voted: post.topic.to_param}, id: "upvote_#{post.topic.id}" %>
   				<% end %>
   			</div>
   			<% end %>
