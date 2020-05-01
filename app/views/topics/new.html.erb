@@ -85,16 +85,9 @@
         <% end %>
       <% end %>
 
-      <!-- added device select -->
-      <div>
-        <label for="cars">Device *</label>
-        <select id="cars" name="cars" class="disable-empty form-control topic-placeholder">
-          <option value="notapplicable">Not Applicable</option>
-          <option value="android">Android</option>
-          <option value="ios">iOS</option>
-          <option value="web">Web</option>
-        </select>
-      </div>
+      <!-- added device select field -->
+      <label class="control-label" for="doc_active">Device *</label>
+      <%= f.select(:device, ['Android', 'iOS', 'Web'], {}, { :class => 'disable-empty form-control topic-placeholder' }) %>
       <br>
       
       <div class="add-screenshots">

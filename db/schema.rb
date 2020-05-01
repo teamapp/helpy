@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191005134018) do
+ActiveRecord::Schema.define(version: 20200430232451) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -267,6 +267,7 @@ ActiveRecord::Schema.define(version: 20191005134018) do
     t.integer  "priority",         default: 1
     t.decimal  "spam_score",       default: 0.0
     t.text     "spam_report",      default: ""
+    t.string   "device"
   end
 
   add_index "topics", ["kind"], name: "index_topics_on_kind", using: :btree
