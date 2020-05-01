@@ -108,9 +108,6 @@ class TopicsController < ApplicationController
   def create
     params[:id].nil? ? @forum = Forum.find(params[:topic][:forum_id]) : @forum = Forum.find(params[:id])
 
-    puts '*' * 100
-    puts "params device #{params[:topic][:device]}"
-
     @topic = @forum.topics.new(
       name: params[:topic][:name],
       private: params[:topic][:private],
