@@ -90,8 +90,8 @@
       <% end %>
 
       <!-- pcavalot / added device select field -->
-      <label class="control-label" for="doc_active">Device *</label>
-      <%= f.select(:device, ['Android', 'iOS', 'Web'], {}, { :class => 'disable-empty form-control topic-placeholder' }) %>
+      <label class="control-label" for="doc_active">Which platform does your support issue relate to? *</label>
+      <%= f.select(:device, ['Android Smartphone', 'Android Tablet', 'iPad', 'iPhone', 'Website', 'None of the above'], {}, { :class => 'disable-empty form-control topic-placeholder' }) %>
       <br>
       
       <div class="add-screenshots">
