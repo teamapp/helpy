@@ -1,41 +1,3 @@
-<!-- pcavalot / this script is also at the top of _form.html.erb but the Helpy.sendfile function is not seen by the onImageUpload callback in summernote -->
-<script>
-  var Helpy = Helpy || {};
-  Helpy.sendFile = function(file, toSummernote) {
-    var data;
-    data = new FormData;
-    data.append('image[file]', file);
-    return $.ajax({
-      data: data,
-      type: 'POST',
-      url: '/admin/images',
-      cache: false,
-      contentType: false,
-      processData: false,
-      success: function(data) {
-        var img;
-        img = document.createElement('IMG');
-        img.src = data.url;
-        img.setAttribute('id', data.image_id);
-        return toSummernote.summernote("insertNode", img);
-      }
-    });
-  };
-
-  Helpy.deleteFile = function(image_id) {
-    return $.ajax({
-      type: 'DELETE',
-      url: '/admin/images/' + image_id,
-      cache: false,
-      contentType: false,
-      processData: false,
-      success: function(data) {
-        console.log("Deleting Image....");
-      }
-    });
-  };
-</script>
-
 <% title "#{admin_title} #{t(:new_content, default: 'New Content')}" %>
 
 <div class="row">
@@ -54,6 +16,7 @@
   <% end %>
   </div>
 </div>
+
 <%= summernote_lang_js %>
 <script type="text/javascript">
   $('.selectize').selectize({
