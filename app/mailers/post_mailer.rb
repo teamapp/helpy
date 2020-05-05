@@ -33,8 +33,6 @@ class PostMailer < ActionMailer::Base
       cc: @post.cc,
       bcc: @post.bccs,
       from: @topic.from_email_address,
-      # subject: "Ticket ##{@topic.id}"
-      # pcavalot / changed email subject from below to above
       subject: "[#{AppSettings['settings.site_name']}] ##{@topic.id}-#{@topic.name}"
       )
   end
