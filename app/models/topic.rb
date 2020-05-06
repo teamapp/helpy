@@ -24,26 +24,28 @@
 #  doc_id           :integer          default(0)
 #  channel          :string           default("email")
 #  kind             :string           default("ticket")
+#  priority         :integer          default(1)
+#  ##               custom additions              ##
+#  device           :string
 #
 
 class Topic < ActiveRecord::Base
 
   include SentenceCase
-
+  include Hashid::Rails
+  
   belongs_to :forum, counter_cache: true, touch: true
   belongs_to :user, counter_cache: true, touch: true
   belongs_to :doc, counter_cache: true, touch: true
   belongs_to :assigned_user, class_name: 'User'
 
-  has_many :posts, :dependent => :delete_all
+  has_many :posts, dependent: :delete_all
   accepts_nested_attributes_for :posts
 
   has_many :votes, :as => :voteable
   has_attachments  :screenshots, accept: [:jpg, :png, :gif, :pdf, :txt, :rtf, :doc, :docx, :ppt, :pptx, :xls, :xlsx, :zip]
 
-  paginates_per 25
-
-  include PgSearch
+  include PgSearch::Model
   multisearchable :against => [:id, :name, :post_cache],
                   :if => :public?
 
@@ -61,15 +63,17 @@ class Topic < ActiveRecord::Base
   scope :mine, -> (user) { where(assigned_user_id: user) }
   scope :closed, -> { where(current_status: "closed") }
   scope :spam, -> { where(current_status: "spam")}
+  scope :trash, -> { where(current_status: "trash")}
   scope :assigned, -> { where.not(assigned_user_id: nil) }
 
   scope :chronologic, -> { order('updated_at DESC') }
   scope :reverse, -> { order('updated_at ASC') }
   scope :by_popularity, -> { order('points DESC') }
-  scope :active, -> { where(current_status: %w(open pending)) }
+  scope :active, -> { where(current_status: %w(new open pending)) }
   scope :undeleted, -> { where.not(current_status: 'trash') }
   scope :front, -> { limit(6) }
   scope :for_doc, -> { where("doc_id= ?", doc)}
+  scope :external, -> { where.not(kind: 'internal') }
 
   # provided both public and private instead of one method, for code readability
   scope :isprivate, -> { where.not(current_status: 'spam').where(private: true)}
@@ -78,12 +82,15 @@ class Topic < ActiveRecord::Base
   # may want to get rid of this filter:
   # before_save :check_for_private
   before_create :add_locale
+  before_create :reject_blacklisted_email_addresses
 
   before_save :cache_user_name
   acts_as_taggable_on :tags, :teams
 
   validates :name, presence: true, length: { maximum: 255 }
   # validates :user_id, presence: true
+
+  enum priority: { low: 0, normal: 1, high: 2, very_high: 3 }
 
   def to_param
     "#{id}-#{name.parameterize}"
@@ -147,13 +154,14 @@ class Topic < ActiveRecord::Base
   def assign(user_id=2, assigned_to)
     self.posts.create(body: I18n.t(:assigned_message, assigned_to: User.find(assigned_to).name), kind: 'note', user_id: user_id)
     self.assigned_user_id = assigned_to
-    self.current_status = 'pending'
+    # self.current_status = 'pending'
     self.save
   end
 
   def self.bulk_agent_assign(post_attributes, assigned_to)
     Post.bulk_insert values: post_attributes
-    self.update_all(assigned_user_id: assigned_to, current_status: 'pending')
+    #self.update_all(assigned_user_id: assigned_to, current_status: 'pending')
+    self.update_all(assigned_user_id: assigned_to)
   end
 
   def self.bulk_group_assign(post_attributes, assigned_group)
@@ -181,13 +189,14 @@ class Topic < ActiveRecord::Base
     forum_id >= 3 && !private?
   end
 
-  def create_topic_with_user(params, current_user)
+  def create_topic_with_user(params, current_user, post)
     self.user = current_user ? current_user : User.find_by_email(params[:topic][:user][:email])
 
     unless self.user #User not found, lets build it
       self.build_user(params[:topic].require(:user).permit(:email, :name)).signup_guest
     end
-    self.user.persisted? && self.save
+    post.user = self.user
+    self.user.persisted? && self.save && post.save
   end
 
   def create_topic_with_webhook_user(params)
@@ -265,9 +274,21 @@ class Topic < ActiveRecord::Base
     end
   end
 
+  def posts_in_last_minute
+    self.posts.where(created_at: Time.now-1.minutes..Time.now, kind: 'reply').count
+  end
+
   private
 
+  # Send any tickets created by a blacklisted email to spam
+  def reject_blacklisted_email_addresses
+    if AppSettings['email.email_blacklist'].split(",").any? { |s| self.user.email.downcase.include?(s.downcase) }
+       self.current_status = "spam"
+    end
+  end  
+
   def cache_user_name
+    return if self.user.nil?
     if self.user.name.present?
       self.user_name = self.user.name
     else
@@ -278,4 +299,5 @@ class Topic < ActiveRecord::Base
   def add_locale
     self.locale = I18n.locale
   end
+
 end

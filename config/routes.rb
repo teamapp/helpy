@@ -27,7 +27,7 @@ Rails.application.routes.draw do
     #    }
 
     match 'users/finish_signup' => 'users#finish_signup', via: [:get, :patch], :as => :finish_signup
-    devise_for :users, skip: [:omniauth_callbacks, :invitations], controllers: { registrations: 'registrations', sessions: 'sessions', passwords: 'passwords' }
+    devise_for :users, skip: [:omniauth_callbacks], controllers: { registrations: 'registrations', sessions: 'sessions', passwords: 'passwords', invitations: 'invitations' }
 
     as :user do
       get "/users/invitation/accept" => "devise/invitations#edit", as: :accept_user_invitation
@@ -88,12 +88,14 @@ Rails.application.routes.draw do
     patch 'topics/update_tags' => 'topics#update_tags', as: :update_topic_tags
     get 'topics/update_multiple' => 'topics#update_multiple_tickets', as: :update_multiple_tickets
     get 'topics/assign_agent' => 'topics#assign_agent', as: :assign_agent
+    get 'topics/unassign_agent' => 'topics#unassign_agent', as: :unassign_agent
     get 'topics/toggle_privacy' => 'topics#toggle_privacy', as: :toggle_privacy
     get 'topics/:id/toggle' => 'topics#toggle_post', as: :toggle_post
     get 'topics/assign_team' => 'topics#assign_team', as: :assign_team
     get 'topics/unassign_team' => 'topics#unassign_team', as: :unassign_team
     post 'topics/:topic_id/split/:post_id' => 'topics#split_topic', as: :split_topic
     get 'shortcuts' => 'topics#shortcuts', as: :shortcuts
+    get 'empty_trash' => 'topics#empty_trash', as: :empty_trash
 
     # SearchController Routes
     get 'search/topic_search' => 'search#topic_search', as: :topic_search
@@ -109,13 +111,15 @@ Rails.application.routes.draw do
     get 'settings/i18n' => 'settings#i18n', as: :i18n_settings
     get 'settings/email' => 'settings#email', as: :email_settings
     get 'settings/integration' => 'settings#integration', as: :integration_settings
+    put 'settings/general' => 'settings#update_general', as: :update_general_settings
+    put 'settings/design' => 'settings#update_design', as: :update_design_settings
+    put 'settings/theme' => 'settings#update_theme', as: :update_theme_settings
+    put 'settings/widget' => 'settings#update_widget', as: :update_widget_settings
+    put 'settings/i18n' => 'settings#update_i18n', as: :update_i18n_settings
+    put 'settings/email' => 'settings#update_email', as: :update_email_settings
+    put 'settings/integration' => 'settings#update_integration', as: :update_integration_settings
     get 'settings/profile' => 'settings#profile', as: :profile_settings
-
-    # Onboarding Routes
-    get '/onboarding/index' => 'onboarding#index', as: :onboarding
-    patch '/onboarding/update_user' => 'onboarding#update_user', as: :onboard_user
-    patch '/onboarding/update_settings' => 'onboarding#update_settings', as: :onboard_settings
-    get '/onboarding/complete' => 'onboarding#complete', as: :complete_onboard
+    get 'settings/trash' => 'settings#trash', as: :trash_settings
 
     # Misc Routes
     post 'shared/update_order' => 'shared#update_order', as: :update_order
@@ -123,12 +127,23 @@ Rails.application.routes.draw do
     get 'users/invite' => 'users#invite', as: :invite
     put 'users/invite_users' => 'users#invite_users', as: :invite_users
 
+    # Export Routes
+    get 'backups' => 'backups#index', as: :backups
+    get 'backups/export' => "backups/export", as: :export_backup
+    get  'backups/download' => "backups/download", as: :download
+    delete 'backups/:id(.:format)', :to => 'backups#destroy', as: :delete_backup
+
+    # Import Routes
+    resources :imports, only: [:index, :show]
+    post 'imports/restore' => "importz/restore", as: :import_restore
+
     post 'posts/users' => 'posts#search', as: :user_search
     get  'posts/new_user' => 'posts#new_user', as: :new_user
     post  'posts/new_user' => 'posts#change_owner_new_user'
 
     get 'internal_docs/search' => 'internal_categories#search', as: :internal_docs_search
 
+    patch 'categories/reorganize' => 'categories#reorganize', as: :reorganize
     resources :categories do
       resources :docs, except: [:index, :show]
     end
@@ -139,23 +154,29 @@ Rails.application.routes.draw do
     end
 
     resources :docs, except: [:index, :show]
+    get 'agent_assistant' => 'agent_assistant#index', as: :agent_assist
 
     resources :images, only: [:create, :destroy]
     resources :forums# , except: [:index, :show]
     resources :users
+    post 'users/:id/scrub' => 'users#scrub', as: :scrub_user
     scope 'settings' do
       resources :api_keys, except: [:show, :edit, :update]
       resources :groups
+      resources :tags
     end
     resources :topics, except: [:delete, :edit] do
       resources :posts
     end
     resources :posts
+    
     get '/posts/:id/raw' => 'posts#raw', as: :post_raw
     get '/dashboard' => 'dashboard#index', as: :dashboard
     get '/reports/team' => 'reports#team', as: :team_reports
     get '/reports/groups' => 'reports#groups', as: :group_reports
     get '/reports' => 'reports#index', as: :reports
+
+    get '/dashboard/blank' => 'dashboard#blank', as: :blank_dashboard
 
     root to: 'dashboard#index'
   end

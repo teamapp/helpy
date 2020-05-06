@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170609170131) do
+ActiveRecord::Schema.define(version: 20200430232451) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,17 @@ ActiveRecord::Schema.define(version: 20170609170131) do
 
   add_index "attachinary_files", ["attachinariable_type", "attachinariable_id", "scope"], name: "by_scoped_parent", using: :btree
 
+  create_table "backups", force: :cascade do |t|
+    t.integer  "user_id"
+    t.text     "csv"
+    t.string   "model"
+    t.string   "csv_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "backups", ["user_id"], name: "index_backups_on_user_id", using: :btree
+
   create_table "categories", force: :cascade do |t|
     t.string   "name"
     t.string   "icon"
@@ -58,7 +69,10 @@ ActiveRecord::Schema.define(version: 20170609170131) do
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
     t.string   "visibility",       default: "all"
+    t.string   "ancestry"
   end
+
+  add_index "categories", ["ancestry"], name: "index_categories_on_ancestry", using: :btree
 
   create_table "category_translations", force: :cascade do |t|
     t.integer  "category_id",      null: false
@@ -142,6 +156,19 @@ ActiveRecord::Schema.define(version: 20170609170131) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "imports", force: :cascade do |t|
+    t.string   "status"
+    t.string   "notes"
+    t.string   "model"
+    t.datetime "started_at"
+    t.datetime "completed_at"
+    t.integer  "submited_record_count"
+    t.text     "imported_ids"
+    t.text     "error_log"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
+
   create_table "pg_search_documents", force: :cascade do |t|
     t.text     "content"
     t.integer  "searchable_id"
@@ -155,14 +182,15 @@ ActiveRecord::Schema.define(version: 20170609170131) do
     t.integer  "user_id"
     t.text     "body"
     t.string   "kind"
-    t.boolean  "active",      default: true
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.integer  "points",      default: 0
-    t.string   "attachments", default: [],                array: true
+    t.boolean  "active",           default: true
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.integer  "points",           default: 0
+    t.string   "attachments",      default: [],                array: true
     t.string   "cc"
     t.string   "bcc"
     t.text     "raw_email"
+    t.string   "email_to_address", default: ""
   end
 
   create_table "searches", force: :cascade do |t|
@@ -236,9 +264,14 @@ ActiveRecord::Schema.define(version: 20170609170131) do
     t.integer  "doc_id",           default: 0
     t.string   "channel",          default: "email"
     t.string   "kind",             default: "ticket"
+    t.integer  "priority",         default: 1
+    t.decimal  "spam_score",       default: 0.0
+    t.text     "spam_report",      default: ""
+    t.string   "device"
   end
 
   add_index "topics", ["kind"], name: "index_topics_on_kind", using: :btree
+  add_index "topics", ["priority"], name: "index_topics_on_priority", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "login"
@@ -266,14 +299,14 @@ ActiveRecord::Schema.define(version: 20170609170131) do
     t.integer  "assigned_ticket_count",  default: 0
     t.integer  "topics_count",           default: 0
     t.boolean  "active",                 default: true
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
-    t.string   "email",                  default: "",       null: false
-    t.string   "encrypted_password",     default: "",       null: false
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+    t.string   "email",                  default: "",          null: false
+    t.string   "encrypted_password",     default: "",          null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,        null: false
+    t.integer  "sign_in_count",          default: 0,           null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
@@ -296,6 +329,8 @@ ActiveRecord::Schema.define(version: 20170609170131) do
     t.boolean  "notify_on_reply",        default: false
     t.string   "account_number"
     t.string   "priority",               default: "normal"
+    t.text     "notes"
+    t.string   "status",                 default: "available"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

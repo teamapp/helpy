@@ -25,6 +25,12 @@
 	}
 }
 
+#right-menu {
+	h2 {
+		font-size: 14px;
+	}
+}
+
 .select-image {
   margin-top: 15px;
   margin-bottom: 30px;
@@ -54,6 +60,10 @@
   .label-count {
     top: 0;
   }
+}
+
+#topic-url {
+	display: none;
 }
 
 .btn-team_app {

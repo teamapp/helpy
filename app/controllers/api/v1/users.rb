@@ -13,7 +13,6 @@ module API
       resource :users, desc: "View and edit users" do
 
         # throttle max: 200, per: 1.minute
-        paginate per_page: 20
 
         # LIST ALL USERS
         desc "List all users", {
@@ -23,6 +22,15 @@ module API
         get "", root: :users do
           users = User.all
           present users, with: Entity::User
+        end
+
+        # LOAD YOUR OWN USER
+        desc "Load your own user", {
+          entity: Entity::User,
+          notes: "Returns the currently logged in user"
+        }
+        get "self", root: :users do
+          present current_user, with: Entity::User
         end
 
         # SEARCH USERS
@@ -80,6 +88,8 @@ module API
           optional :language, type: String, desc: "Users prefered language"
           optional :active, type: Boolean, desc: "User active or deactivated", default: true
           optional :priority, type: String, desc: "Users Priority", values: ['low', 'normal', 'high', 'vip'], default: 'normal'
+          optional :notes, type: String, desc: "Notes about the user"
+          optional :status, type: String, desc: "User/Agent status"
         end
         post "", root: :users do
           user = User.create!(
@@ -105,7 +115,9 @@ module API
             linkedin: permitted_params[:linkedin],
             language: permitted_params[:language],
             active: permitted_params[:active],
-            priority: permitted_params[:priority]
+            priority: permitted_params[:priority],
+            notes: permitted_params[:notes],
+            status: permitted_params[:status]
             )
           present user, with: Entity::User
         end
@@ -140,6 +152,8 @@ module API
           optional :language, type: String, desc: "Users prefered language"
           optional :active, type: Boolean, desc: "User active or deactivated"
           optional :priority, type: String, desc: "Users Priority- low, normal, high or vip", default: 'normal'
+          optional :notes, type: String, desc: "Notes about the user"
+          optional :status, type: String, desc: "User/Agent status"
         end
         patch ":id", root: :users do
           user = User.where(id: permitted_params[:id]).first
@@ -166,8 +180,49 @@ module API
             linkedin: permitted_params[:linkedin],
             language: permitted_params[:language],
             active: permitted_params[:active],
-            priority: permitted_params[:priority]
+            priority: permitted_params[:priority],
+            notes: permitted_params[:notes],
+            status: permitted_params[:status]
             )
+          present user, with: Entity::User
+        end
+
+        # UPDATE AGENT STATUS
+        desc "Update agents status", {
+          entity: Entity::User,
+          notes: "Update a user"
+        }
+        params do
+          requires :id, type: Integer, desc: "User ID"
+          requires :status, type: String, desc: "User/Agent status"
+        end
+        patch "status/:id", root: :users do
+          user = User.where(id: permitted_params[:id]).first
+          user.update!(
+            status: permitted_params[:status]
+            )
+          present user, with: Entity::User
+        end
+
+        # DELETE A USER
+        desc "Delete a user"
+        params do
+          requires :id, type: Integer, desc: "User ID"
+        end
+        delete ":id", root: :users do
+          user = User.find(permitted_params[:id])
+          user.permanently_destroy
+          body false
+        end
+
+        # ANONYMIZE A USER
+        desc "Anonymize a user"
+        params do
+          requires :id, type: Integer, desc: "User ID"
+        end
+        post "anonymize/:id", root: :users do
+          user = User.find(permitted_params[:id])
+          user.scrub
           present user, with: Entity::User
         end
 
