@@ -8,6 +8,10 @@ Helpy.ready = function(){
 
   $(".best_in_place").best_in_place();
 
+  $('.edit-topic-name-menu').on('click', function(){
+    $('.best_in_place').click();
+  });
+
   $('.profile').initial();
 
   $('.attachinary-input').attachinary();
@@ -194,7 +198,10 @@ Helpy.ready = function(){
   // Generate temp email address on demand, in case the user does not have an email
   $('.generate-temp').off().on('click', function(){
     if ($('#topic_user_email').val() === '') {
-      $('#topic_user_email').val("change@me-" + $("#topic_user_home_phone").val() + '-' + $("#topic_user_name").val().replace(" ","-") + '.com');
+      var placeholder = Math.random().toString(36).substring(7);
+      $('#topic_user_email').val("change@me-" + placeholder + '.com');
+      $('#topic_user_email').trigger('change');
+      $('#topic_user_email').trigger('focusout');
       return false;
     }
   });
@@ -204,12 +211,19 @@ Helpy.ready = function(){
   $("ul.breadcrumb li:last-child").html("");
 
   // compress thread if there are more than 4 messages
-  // var $thread = $('.post-container.kind-reply.disallow-post-voting, .post-container.kind-note.disallow-post-voting');
+  var $threadAll = $('.post-container');
+
+  // add kind first to first post if it is missing
+  if (!$threadAll.first().hasClass('kind-first')) {
+    $threadAll.first().removeClass('kind-reply').addClass('kind-first');
+  }
   var $thread = $('.post-container.kind-reply.disallow-post-voting');
+
+
+
   if ($thread.size() >= 2) {
 
     // insert expand thread message
-//    var $hider = "<div class='collapsed-posts text-center'><span class='label label-collapsed'>" + ($thread.size()-1) + " collapsed messages </span></div>";
     var $hider = "<div class='collapsed-posts text-center'><span class='label label-collapsed'>" + Helpy.messages + " </span></div>";
 
     // check to see if we are already collapsed
@@ -241,6 +255,11 @@ Helpy.ready = function(){
     } else {
       $(this).next('#post_reply_id_link').hide();
     }
+
+    // set value of summernote with existing value + common reply
+    $('#post_body').summernote('code', $('#post_body').summernote('code') + common_reply.val());
+    $('#topic_post_body').summernote('code', $('#topic_post_body').summernote('code') + common_reply.val());
+    $('.disableable').attr('disabled', false);
   });
 
   $('.post-menu span').off().on('click', function(){
@@ -300,19 +319,25 @@ Helpy.ready = function(){
   });
 
   $('.multiple-update').off().on('click', function(){
-    // collect array of all checked boxes
-    var topic_ids = {};
     var str = $(this).attr('href');
-    $('.topic-checkbox:checked').each(function(i){
-      topic_ids[i] = $(this).val();
-    });
-    // modify link to include array
-    $.each(topic_ids, function(i){
-      str = str + "&topic_ids[]=" + topic_ids[i];
-    });
-    $(this).attr('href', str);
+    if ($('#select_all').is(':checked')) {
+      str = str + "&affect=all";
+      $(this).attr('href', str);
+    } else {
+      // collect array of all checked boxes
+      var topic_ids = {};
+      $('.topic-checkbox:checked').each(function(i){
+        topic_ids[i] = $(this).val();
+      });
+      // modify link to include array
+      $.each(topic_ids, function(i){
+        str = str + "&topic_ids[]=" + topic_ids[i];
+      });
+      $(this).attr('href', str);
+    }
     // return true to follow the link
     return true;
+
   });
 
   // Topic voting widget animation
@@ -398,11 +423,11 @@ Helpy.ready = function(){
 
   // Add hoversort icon
   $('.hoversort').off().on('mouseover', function(){
-    $(this).prepend('<span class="fa fa-arrows-v" style="color:#666; margin-right: 0;"></span>');
+    $(this).prepend('<span class="fas fa-arrows-alt-v" style="color:#666; margin-right: 0;"></span>');
     $(this).css("cursor","move");
 
     $(this).on('mouseout', function(){
-      $(this).find('span.fa-arrows-v').remove();
+      $(this).find('span.fa-arrows-alt-v').remove();
     });
   });
 };
@@ -448,6 +473,9 @@ Helpy.didthisHelp = function(yesno){
 Helpy.showGroup = function() {
   if ($('#topic_private_true').is(':checked')) {
     $('#topic_team_list').parent().removeClass('hidden');
+    $("#topic_forum_id").parent().hide();
+    $('#new_topic').append("<input type='hidden' id='new_topic_forum_id' name='topic[forum_id]' value='1'/>");
+    $('#topic_team_list').removeClass('hidden');
   } else if ($('#topic_private_false').is(':checked')) {
     $('#topic_team_list').parent().addClass('hidden');
   } else {
@@ -456,8 +484,41 @@ Helpy.showGroup = function() {
 };
 
 Helpy.loader = function(){
-  $('#tickets').html("<div class=\"col-md-12 text-center no-tickets\"><i class=\"fa fa-spinner fa-pulse fa-3x fa-fw\"></i><span class=\"sr-only\"></span></div>");
+  $('#tickets').html("<div class=\"col-md-12 text-center no-tickets\"><i class=\"fas fa-spinner fa-pulse fa-3x fa-fw\"></i><span class=\"sr-only\"></span></div>");
 };
+
+// Provides attachment validation
+Helpy.validateFiles = function (inputFile, allowedExtension, blockedExtension) {
+  var extErrorMessage, maxExceededMessage = "This file exceeds the maximum allowed file size (5 MB)";
+  if (allowedExtension.length > 0) {
+    extErrorMessage = "The following file types are allowed: " + allowedExtension;
+  } else if (blockedExtension.length > 0) {
+    extErrorMessage = "A file you attempted to upload is not allowed";
+  }
+  
+  var extName;
+  var maxFileSize = $(inputFile).data('max-file-size');
+  var sizeExceeded = false;
+  var extError = false;
+
+  $.each(inputFile.files, function () {
+    if (this.size && maxFileSize && this.size > parseInt(maxFileSize)) { sizeExceeded = true; }
+    extName = this.name.split('.').pop();
+    if (allowedExtension.length > 0 && $.inArray(extName, allowedExtension) == -1) { extError = true; }
+    if (blockedExtension.length > 0 && $.inArray(extName, blockedExtension) != -1) { extError = true; }
+  });
+  if (sizeExceeded) {
+    window.alert(maxExceededMessage);
+    $(inputFile).val('');
+  }
+
+  if (extError) {
+    window.alert(extErrorMessage);
+    $(inputFile).val('');
+  }
+};
+
+
 
 $(document).ready(Helpy.ready);
 $(document).on('page:load', Helpy.ready);
