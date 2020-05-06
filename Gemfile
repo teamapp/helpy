@@ -159,6 +159,9 @@ gem 'best_in_place', '~> 3.1'
 gem 'helpy_onboarding', git: 'https://github.com/helpyio/helpy_onboarding', branch: 'master'
 gem 'helpy_imap', git: 'https://github.com/helpyio/helpy_imap', branch: 'master'
 
+# debugging
+gem 'honeybadger', '~> 4.0'
+
 group :development, :test do
   # Audit Gemfile for security vulnerabilities
   gem 'bundler-audit', require: false
