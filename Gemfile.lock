@@ -288,6 +288,7 @@ GEM
     hashids (1.0.5)
     hashie (3.6.0)
     hitimes (2.0.0)
+    honeybadger (4.6.0)
     htmlentities (4.3.4)
     http-accept (1.7.0)
     http-cookie (1.0.3)
@@ -686,6 +687,7 @@ DEPENDENCIES
   hashid-rails (~> 1.0)
   helpy_imap!
   helpy_onboarding!
+  honeybadger (~> 4.0)
   http_accept_language
   i18n-country-translations
   inky-rb
