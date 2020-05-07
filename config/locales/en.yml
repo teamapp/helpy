@@ -53,8 +53,7 @@ en:
   submit_start_discussion: "Create Ticket"
   should_message_be_private: "Should this message be private?"
   only_support_can_respond: "Only support can respond (creates a private ticket)"
-  responses_can_come_from_everyone: "Responses can come from support or the community"
-  # pcavalot / responses_can_come_from_everyone: "Responses can come from support or the community (recommended)"
+  responses_can_come_from_everyone: "Responses can come from support or the community (recommended)"
   collapsed_messages:
       one: "1 collapsed message"
       two: "2 collapsed messages"
